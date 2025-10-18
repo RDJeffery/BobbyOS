@@ -29,7 +29,12 @@ fi
 
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
-pip3 install -r requirements.txt
+echo "   Creating virtual environment..."
+python3 -m venv venv
+echo "   Activating virtual environment..."
+source venv/bin/activate
+echo "   Installing packages..."
+pip install -r requirements.txt
 
 # Make main script executable
 echo "🔧 Making scripts executable..."
@@ -56,7 +61,7 @@ Version=1.0
 Type=Application
 Name=Pi GameUI
 Comment=Retro Gaming Launcher
-Exec=python3 $SCRIPT_DIR/main.py
+Exec=$SCRIPT_DIR/venv/bin/python $SCRIPT_DIR/main.py
 Icon=applications-games
 Terminal=false
 Categories=Game;
@@ -114,7 +119,11 @@ def main():
     # Try to run the launcher
     print("🚀 Starting launcher...")
     try:
-        subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'main.py')])
+        venv_python = os.path.join(os.path.dirname(__file__), 'venv', 'bin', 'python')
+        if os.path.exists(venv_python):
+            subprocess.run([venv_python, os.path.join(os.path.dirname(__file__), 'main.py')])
+        else:
+            subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'main.py')])
     except KeyboardInterrupt:
         print("\n⏹️  Launcher stopped by user")
     except Exception as e:
@@ -171,6 +180,10 @@ A fullscreen gaming launcher designed for Raspberry Pi with 320×240 display.
 2. Test the launcher:
    ```bash
    python3 test_launcher.py
+   ```
+   Or run directly:
+   ```bash
+   ./venv/bin/python main.py
    ```
 
 3. Start the service:
