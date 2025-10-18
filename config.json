@@ -1,0 +1,5 @@
+[
+    {"label": "Shutdown", "command": "sudo shutdown now"},
+    {"label": "Shell","command": "python3 apps/shell_ui.py"}
+
+]

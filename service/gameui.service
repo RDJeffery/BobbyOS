@@ -1,0 +1,27 @@
+[Unit]
+Description=Pi GameUI Launcher
+After=graphical.target
+Wants=graphical.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/raspbian_ui/main.py
+Restart=always
+RestartSec=5
+User=pi
+Group=pi
+Environment=DISPLAY=:0
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/home/pi/raspbian_ui
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/home/pi/raspbian_ui
+ProtectHome=true
+
+[Install]
+WantedBy=graphical.target

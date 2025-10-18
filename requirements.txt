@@ -1,0 +1,6 @@
+# Core UI framework
+pygame==2.5.2          # Handles graphics, input, and touchscreen events
+
+# Optional quality-of-life tools
+Pillow==11.0.0         # For image loading/conversion if using PNG/JPG assets
+numpy==2.1.2           # Helps with pixel manipulation or animation math
