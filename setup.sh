@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Pi GameUI Setup Script
-# This script helps set up the GameUI launcher on a Raspberry Pi
+# BobbyOS Setup Script
+# This script helps set up the BobbyOS launcher on a Raspberry Pi
 
 set -e
 
-echo "🎮 Pi GameUI Setup Script"
-echo "========================="
+echo "🎮 BobbyOS Setup Script"
+echo "======================="
 
 # Check if running as root
 if [ "$EUID" -eq 0 ]; then
@@ -16,7 +16,7 @@ fi
 
 # Get the current directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SERVICE_NAME="gameui.service"
+SERVICE_NAME="bobbyos.service"
 SERVICE_FILE="$SCRIPT_DIR/service/$SERVICE_NAME"
 
 echo "📁 Working directory: $SCRIPT_DIR"
@@ -54,12 +54,12 @@ fi
 
 # Create desktop entry for easy testing
 echo "🖥️  Creating desktop entry..."
-DESKTOP_FILE="/home/pi/Desktop/Pi GameUI.desktop"
+DESKTOP_FILE="/home/pi/Desktop/BobbyOS.desktop"
 cat > "$DESKTOP_FILE" << EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Pi GameUI
+Name=BobbyOS
 Comment=Retro Gaming Launcher
 Exec=$SCRIPT_DIR/venv/bin/python $SCRIPT_DIR/main.py
 Icon=applications-games
@@ -80,7 +80,7 @@ echo "🧪 Creating test script..."
 cat > "$SCRIPT_DIR/test_launcher.py" << 'EOF'
 #!/usr/bin/env python3
 """
-Test script for Pi GameUI
+Test script for BobbyOS
 This script can be used to test the launcher without the full systemd service
 """
 
@@ -89,7 +89,7 @@ import sys
 import os
 
 def main():
-    print("🎮 Testing Pi GameUI Launcher...")
+    print("🎮 Testing BobbyOS Launcher...")
     
     # Check if pygame is available
     try:
@@ -142,7 +142,7 @@ chmod +x "$SCRIPT_DIR/test_launcher.py"
 # Create README
 echo "📝 Creating README..."
 cat > "$SCRIPT_DIR/README.md" << 'EOF'
-# Pi GameUI - Retro Gaming Launcher
+# BobbyOS - Retro Gaming Launcher
 
 A fullscreen gaming launcher designed for Raspberry Pi with 320×240 display.
 
@@ -188,12 +188,12 @@ A fullscreen gaming launcher designed for Raspberry Pi with 320×240 display.
 
 3. Start the service:
    ```bash
-   sudo systemctl start gameui
+   sudo systemctl start bobbyos
    ```
 
 4. Enable auto-start on boot:
    ```bash
-   sudo systemctl enable gameui
+   sudo systemctl enable bobbyos
    ```
 
 ## Configuration
@@ -216,8 +216,8 @@ Place your custom assets in the `assets/` directory:
 
 ## Troubleshooting
 
-- Check service status: `sudo systemctl status gameui`
-- View logs: `journalctl -u gameui -f`
+- Check service status: `sudo systemctl status bobbyos`
+- View logs: `journalctl -u bobbyos -f`
 - Test manually: `python3 test_launcher.py`
 
 ## Development
@@ -230,8 +230,8 @@ echo "🎉 Setup completed successfully!"
 echo ""
 echo "📋 Next steps:"
 echo "   1. Test the launcher: python3 test_launcher.py"
-echo "   2. Start the service: sudo systemctl start gameui"
-echo "   3. Enable auto-start: sudo systemctl enable gameui"
+echo "   2. Start the service: sudo systemctl start bobbyos"
+echo "   3. Enable auto-start: sudo systemctl enable bobbyos"
 echo ""
 echo "📖 For more information, see README.md"
 echo ""
