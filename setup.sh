@@ -27,14 +27,17 @@ if ! grep -q "Raspberry Pi" /proc/cpuinfo 2>/dev/null; then
     echo "   The setup will continue, but some features may not work correctly."
 fi
 
-# Install Python dependencies
-echo "📦 Installing Python dependencies..."
-echo "   Creating virtual environment..."
-python3 -m venv venv
-echo "   Activating virtual environment..."
-source venv/bin/activate
-echo "   Installing packages..."
-pip install -r requirements.txt
+# Install Python dependencies via apt (system Python)
+echo "📦 Installing Python dependencies via apt..."
+echo "   Updating apt index (may require sudo password)..."
+sudo apt-get update -y
+echo "   Installing pygame-ce (if available) or fallback to python3-pygame..."
+if sudo apt-get install -y python3-pygame-ce; then
+    echo "✅ Installed python3-pygame-ce"
+else
+    echo "⚠️  python3-pygame-ce not available, installing python3-pygame instead"
+    sudo apt-get install -y python3-pygame
+fi
 
 # Make main script executable
 echo "🔧 Making scripts executable..."
@@ -61,7 +64,7 @@ Version=1.0
 Type=Application
 Name=BobbyOS
 Comment=Retro Gaming Launcher
-Exec=$SCRIPT_DIR/venv/bin/python $SCRIPT_DIR/main.py
+Exec=/usr/bin/python3 $SCRIPT_DIR/main.py
 Icon=applications-games
 Terminal=false
 Categories=Game;
@@ -96,8 +99,8 @@ def main():
         import pygame
         print("✅ Pygame is available")
     except ImportError:
-        print("❌ Pygame not found. Please install requirements:")
-        print("   pip3 install -r requirements.txt")
+        print("❌ Pygame not found. Please install via apt:")
+        print("   sudo apt-get update && sudo apt-get install -y python3-pygame-ce || sudo apt-get install -y python3-pygame")
         return 1
     
     # Check if assets exist
@@ -119,11 +122,7 @@ def main():
     # Try to run the launcher
     print("🚀 Starting launcher...")
     try:
-        venv_python = os.path.join(os.path.dirname(__file__), 'venv', 'bin', 'python')
-        if os.path.exists(venv_python):
-            subprocess.run([venv_python, os.path.join(os.path.dirname(__file__), 'main.py')])
-        else:
-            subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'main.py')])
+        subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'main.py')])
     except KeyboardInterrupt:
         print("\n⏹️  Launcher stopped by user")
     except Exception as e:
@@ -181,9 +180,9 @@ A fullscreen gaming launcher designed for Raspberry Pi with 320×240 display.
    ```bash
    python3 test_launcher.py
    ```
-   Or run directly:
+   Or run directly with system Python:
    ```bash
-   ./venv/bin/python main.py
+   python3 main.py
    ```
 
 3. Start the service:
